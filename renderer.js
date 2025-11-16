@@ -192,82 +192,112 @@ function showSponsorPopup() {
         <!-- 内容区域 -->
         <div style="padding: 48px 40px 40px;">
           <!-- 图标和标题 -->
-          <div style="text-align: center; margin-bottom: 32px;">
-            <!-- 跪求表情包 -->
+          <div style="text-align: center; margin-bottom: 28px;">
+            <!-- 跪求表情包图片 -->
             <div style="
-              font-size: 72px;
-              margin-bottom: 16px;
+              margin-bottom: 20px;
               animation: bounce 1.5s ease-in-out infinite;
               display: inline-block;
-            ">🙏</div>
+              position: relative;
+            ">
+              <img src="pay/IMG_4702.jpeg" alt="跪求赞助" style="
+                width: 140px;
+                height: 140px;
+                border-radius: 20px;
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+                object-fit: cover;
+                border: 3px solid #fff;
+              ">
+              <!-- 哭泣表情 -->
+              <div style="
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                font-size: 32px;
+                animation: shake 0.5s ease-in-out infinite;
+              ">😭</div>
+            </div>
             <h3 style="
-              margin: 0 0 8px 0;
-              font-size: 26px;
+              margin: 0 0 12px 0;
+              font-size: 28px;
               font-weight: 800;
               background: linear-gradient(135deg, #ff9500, #ff3b30);
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
               background-clip: text;
               letter-spacing: -0.5px;
-            ">求求了，给个赞助吧！</h3>
+              line-height: 1.2;
+            ">开发者快没钱吃饭了...</h3>
+            <p style="
+              margin: 0 0 8px 0;
+              font-size: 14px;
+              color: #6e6e73;
+              font-weight: 500;
+              line-height: 1.6;
+            ">服务器账单💸、CDN费用💰、域名续费📅<br>每天都在烧钱，真的顶不住了 😢</p>
             <p style="
               margin: 0;
-              font-size: 13px;
+              font-size: 12px;
               color: #86868b;
-              font-weight: 500;
-            ">开发者已经跪下了 🧎‍♂️</p>
+              font-style: italic;
+            ">求求了，给口饭吃吧 🍚</p>
           </div>
           
-          <!-- 特性卡片 -->
+          <!-- 悲情卡片 -->
           <div style="
-            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 28px;
-            border: 1px solid #d1e7ff;
+            border: 2px dashed #ffcccc;
           ">
-            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
-              <div style="
-                width: 32px;
-                height: 32px;
-                background: linear-gradient(135deg, #007aff, #5ac8fa);
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-              ">
-                <i data-lucide="check" style="width: 18px; height: 18px; color: white;"></i>
+            <div style="text-align: center; margin-bottom: 16px;">
+              <div style="font-size: 16px; font-weight: 700; color: #ff3b30; margin-bottom: 12px;">
+                💔 真实的困境
               </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
+              <div style="font-size: 20px; flex-shrink: 0;">😰</div>
               <div>
-                <div style="font-size: 14px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">
-                  完全免费开源
+                <div style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">
+                  服务器每月 ¥500+
                 </div>
-                <div style="font-size: 12px; color: #6e6e73; line-height: 1.6;">
-                  所有功能永久免费，代码开源透明
+                <div style="font-size: 11px; color: #6e6e73; line-height: 1.5;">
+                  API 中转、数据存储、版本管理...
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
+              <div style="font-size: 20px; flex-shrink: 0;">😭</div>
+              <div>
+                <div style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">
+                  CDN 流量费 ¥300+
+                </div>
+                <div style="font-size: 11px; color: #6e6e73; line-height: 1.5;">
+                  让你们用得更快更流畅...
                 </div>
               </div>
             </div>
             <div style="display: flex; align-items: flex-start; gap: 12px;">
-              <div style="
-                width: 32px;
-                height: 32px;
-                background: linear-gradient(135deg, #ff9500, #ff3b30);
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-              ">
-                <i data-lucide="zap" style="width: 18px; height: 18px; color: white;"></i>
-              </div>
+              <div style="font-size: 20px; flex-shrink: 0;">🥺</div>
               <div>
-                <div style="font-size: 14px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">
-                  持续运营成本
+                <div style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">
+                  开发时间无价
                 </div>
-                <div style="font-size: 12px; color: #6e6e73; line-height: 1.6;">
-                  服务器、CDN、API 中转需要您的支持
+                <div style="font-size: 11px; color: #6e6e73; line-height: 1.5;">
+                  熬夜写代码、修 Bug、回复用户...
                 </div>
+              </div>
+            </div>
+            <div style="
+              margin-top: 16px;
+              padding: 12px;
+              background: rgba(255, 59, 48, 0.1);
+              border-radius: 8px;
+              text-align: center;
+            ">
+              <div style="font-size: 12px; color: #ff3b30; font-weight: 600;">
+                真的撑不住了，求求给点支持吧 🙏
               </div>
             </div>
           </div>
@@ -306,7 +336,7 @@ function showSponsorPopup() {
               gap: 8px;
             " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 28px rgba(255, 59, 48, 0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(255, 59, 48, 0.35)'">
               <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
-              <span>赞助支持</span>
+              <span>给口饭吃 🍚</span>
             </button>
           </div>
         </div>
@@ -341,6 +371,11 @@ function showSponsorPopup() {
         75% { 
           transform: translateY(-8px) scale(1.02);
         }
+      }
+      @keyframes shake {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-15deg); }
+        75% { transform: rotate(15deg); }
       }
       @keyframes gradientMove {
         0% { background-position: 0% 50%; }
