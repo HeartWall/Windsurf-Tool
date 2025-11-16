@@ -13,6 +13,61 @@ try {
   };
 }
 
+/**
+ * 刷新所有数据（账号列表、域名配置等）
+ */
+async function refreshAllData() {
+  try {
+    console.log('🔄 开始刷新所有数据...');
+    
+    // 显示加载提示
+    if (typeof showToast === 'function') {
+      showToast('正在刷新所有数据...', 'info');
+    }
+    
+    // 1. 刷新账号列表
+    console.log('📋 刷新账号列表...');
+    if (typeof loadAccounts === 'function') {
+      await loadAccounts();
+    }
+    
+    // 2. 刷新域名配置
+    console.log('🌐 刷新域名配置...');
+    if (typeof window.DomainManager !== 'undefined' && window.DomainManager.init) {
+      await window.DomainManager.init();
+    }
+    
+    // 3. 刷新邮箱配置
+    console.log('📧 刷新邮箱配置...');
+    if (typeof loadEmailConfig === 'function') {
+      await loadEmailConfig();
+    }
+    
+    // 4. 刷新当前登录账号
+    console.log('👤 刷新当前登录账号...');
+    if (typeof refreshCurrentAccount === 'function') {
+      await refreshCurrentAccount();
+    }
+    
+    // 5. 重新初始化图标
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+    
+    console.log('✅ 所有数据刷新完成');
+    if (typeof showToast === 'function') {
+      showToast('所有数据已刷新', 'success');
+    }
+  } catch (error) {
+    console.error('❌ 刷新数据失败:', error);
+    if (typeof showToast === 'function') {
+      showToast('刷新失败: ' + error.message, 'error');
+    } else {
+      alert('刷新失败: ' + error.message);
+    }
+  }
+}
+
 // 使用全局的 ipcRenderer (通过 window.ipcRenderer 访问)
 
 // 引入 Electron shell 模块（全局使用）
