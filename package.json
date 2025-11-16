@@ -165,23 +165,11 @@
     },
     "win": {
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
+        "nsis",
+        "portable"
       ],
       "icon": "build/icon.ico",
-      "artifactName": "Windsurf-Tool-Setup-${version}.exe",
+      "artifactName": "Windsurf-Tool-Setup-${version}-${arch}.${ext}",
       "requestedExecutionLevel": "requireAdministrator",
       "verifyUpdateCodeSignature": false,
       "publisherName": "Windsurf Tool",
