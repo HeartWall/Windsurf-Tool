@@ -992,6 +992,22 @@
       background: #ffffff !important;
     }
 
+    /* 可排序表头样式 */
+    .sortable-header {
+      cursor: pointer;
+      user-select: none;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .sortable-header:hover {
+      color: var(--primary) !important;
+    }
+
+    .sortable-header i {
+      flex-shrink: 0;
+    }
+
     /* 列定义 */
     .acc-col {
       padding: 0 8px;

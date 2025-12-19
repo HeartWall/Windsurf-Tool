@@ -2,6 +2,11 @@
 // 负责账号列表的加载、显示、添加、删除、导出等操作
 
 const AccountManager = {
+  // 排序状态
+  sortState: {
+    field: null,      // 当前排序字段
+    direction: 'asc'  // 排序方向: 'asc' 升序, 'desc' 降序
+  },
   /**
    * 加载并显示账号列表
    */
@@ -19,9 +24,15 @@ const AccountManager = {
     }
     
     // 过滤掉无效账号（空对象或没有邮箱的）
-    const validAccounts = accounts.filter(acc => acc && acc.email);
+    let validAccounts = accounts.filter(acc => acc && acc.email);
     
     console.log('开始渲染', validAccounts.length, '个账号');
+
+    // 应用排序（如果有排序字段）
+    if (this.sortState.field) {
+      validAccounts = this.sortAccounts(validAccounts);
+      console.log(`已按 ${this.sortState.field} ${this.sortState.direction} 排序`);
+    }
     
     // 按账号类型分组（忽略大小写）
     const typeGroups = {
@@ -85,19 +96,43 @@ const AccountManager = {
       };
     }
     
-    // 构造表头
+    // 获取排序图标
+    const getSortIcon = (field) => {
+      if (this.sortState.field !== field) {
+        return '<i data-lucide="chevrons-up-down" style="width: 12px; height: 12px; opacity: 0.4;"></i>';
+      }
+      return this.sortState.direction === 'asc' 
+        ? '<i data-lucide="chevron-up" style="width: 12px; height: 12px;"></i>'
+        : '<i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>';
+    };
+
+    // 构造表头（可点击排序）
     let html = `
       <div class="account-item header">
         <div class="acc-col acc-col-index">ID</div>
-        <div class="acc-col acc-col-email">邮箱</div>
+        <div class="acc-col acc-col-email sortable-header" data-sort="email" onclick="AccountManager.handleSort('email')">
+          邮箱 ${getSortIcon('email')}
+        </div>
         <div class="acc-col acc-col-password">密码</div>
-        <div class="acc-col acc-col-type">类型</div>
-        <div class="acc-col acc-col-credits">积分</div>
-        <div class="acc-col acc-col-used">已用</div>
-        <div class="acc-col acc-col-usage">使用率</div>
-        <div class="acc-col acc-col-expiry">到期时间</div>
+        <div class="acc-col acc-col-type sortable-header" data-sort="type" onclick="AccountManager.handleSort('type')">
+          类型 ${getSortIcon('type')}
+        </div>
+        <div class="acc-col acc-col-credits sortable-header" data-sort="credits" onclick="AccountManager.handleSort('credits')">
+          积分 ${getSortIcon('credits')}
+        </div>
+        <div class="acc-col acc-col-used sortable-header" data-sort="usedCredits" onclick="AccountManager.handleSort('usedCredits')">
+          已用 ${getSortIcon('usedCredits')}
+        </div>
+        <div class="acc-col acc-col-usage sortable-header" data-sort="usage" onclick="AccountManager.handleSort('usage')">
+          使用率 ${getSortIcon('usage')}
+        </div>
+        <div class="acc-col acc-col-expiry sortable-header" data-sort="expiresAt" onclick="AccountManager.handleSort('expiresAt')">
+          到期时间 ${getSortIcon('expiresAt')}
+        </div>
         <div class="acc-col acc-col-status">Token</div>
-        <div class="acc-col acc-col-note">备注</div>
+        <div class="acc-col acc-col-note sortable-header" data-sort="note" onclick="AccountManager.handleSort('note')">
+          备注 ${getSortIcon('note')}
+        </div>
         <div class="acc-col acc-col-actions">操作</div>
       </div>
     `;
@@ -236,6 +271,73 @@ const AccountManager = {
     if (activeEl) activeEl.textContent = activeCount;
     if (warningEl) warningEl.textContent = warningCount;
     if (expiredEl) expiredEl.textContent = expiredCount;
+  },
+
+  /**
+   * 处理表头排序点击
+   * @param {string} field - 排序字段
+   */
+  handleSort(field) {
+    // 如果点击同一字段，切换排序方向
+    if (this.sortState.field === field) {
+      this.sortState.direction = this.sortState.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      // 点击新字段，默认升序
+      this.sortState.field = field;
+      this.sortState.direction = 'asc';
+    }
+    console.log(`排序: ${field} ${this.sortState.direction}`);
+    // 重新加载列表（会应用排序）
+    this.loadAccounts();
+  },
+
+  /**
+   * 对账号列表进行排序
+   * @param {Array} accounts - 账号数组
+   * @returns {Array} - 排序后的账号数组
+   */
+  sortAccounts(accounts) {
+    if (!this.sortState.field) {
+      return accounts; // 没有排序字段，返回原数组
+    }
+
+    const field = this.sortState.field;
+    const direction = this.sortState.direction === 'asc' ? 1 : -1;
+
+    return [...accounts].sort((a, b) => {
+      let valA = a[field];
+      let valB = b[field];
+
+      // 特殊处理不同字段类型
+      switch (field) {
+        case 'email':
+        case 'note':
+        case 'type':
+          // 字符串排序（不区分大小写）
+          valA = (valA || '').toLowerCase();
+          valB = (valB || '').toLowerCase();
+          break;
+        case 'credits':
+        case 'usedCredits':
+        case 'usage':
+          // 数字排序（处理 undefined 和 '-'）
+          valA = typeof valA === 'number' ? valA : -Infinity;
+          valB = typeof valB === 'number' ? valB : -Infinity;
+          break;
+        case 'expiresAt':
+          // 日期排序
+          valA = valA ? new Date(valA).getTime() : 0;
+          valB = valB ? new Date(valB).getTime() : 0;
+          break;
+        default:
+          valA = valA || '';
+          valB = valB || '';
+      }
+
+      if (valA < valB) return -1 * direction;
+      if (valA > valB) return 1 * direction;
+      return 0;
+    });
   },
 
   /**

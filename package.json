@@ -484,9 +484,7 @@
         {
           "target": "nsis",
           "arch": [
-            "x64",
-            "ia32",
-            "arm64"
+            "x64"
           ]
         }
       ],
@@ -495,6 +493,7 @@
       "requestedExecutionLevel": "asInvoker",
       "verifyUpdateCodeSignature": false,
       "publisherName": "Windsurf Tool",
+      "sign": null,
       "signingHashAlgorithms": [
         "sha256"
       ]
