@@ -2,10 +2,10 @@
 // 负责账号列表的加载、显示、添加、删除、导出等操作
 
 const AccountManager = {
-  // 排序状态
+  // 排序状态 - 默认按使用率从高到低排序
   sortState: {
-    field: null,      // 当前排序字段
-    direction: 'asc'  // 排序方向: 'asc' 升序, 'desc' 降序
+    field: 'usage',      // 当前排序字段
+    direction: 'desc'    // 排序方向: 'asc' 升序, 'desc' 降序
   },
   /**
    * 加载并显示账号列表

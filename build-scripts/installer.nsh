@@ -2,6 +2,12 @@
 ; 用于保护用户数据不被安装程序清空
 
 !macro customInit
+  ; 检测并关闭正在运行的程序
+  nsExec::ExecToLog 'taskkill /F /IM "Windsurf-Tool.exe"'
+  
+  ; 等待进程完全退出
+  Sleep 1000
+  
   ; 在安装前备份用户数据
   SetShellVarContext current
   StrCpy $0 "$APPDATA\windsurf-tool"
@@ -26,6 +32,10 @@
 !macroend
 
 !macro customUnInit
+  ; 卸载前关闭正在运行的程序
+  nsExec::ExecToLog 'taskkill /F /IM "Windsurf-Tool.exe"'
+  Sleep 500
+  
   ; 卸载时不删除用户数据
   ; 这个宏确保用户数据被保留
 !macroend
