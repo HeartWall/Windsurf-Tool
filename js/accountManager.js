@@ -572,6 +572,84 @@ const AccountManager = {
   },
 
   /**
+   * 删除使用率超过90%的Trial账号
+   */
+  async deleteHighUsageTrialAccounts() {
+    try {
+      // 获取账号列表
+      const result = await window.ipcRenderer.invoke('get-accounts');
+      
+      if (!result.success) {
+        throw new Error(result.error || '获取账号列表失败');
+      }
+      
+      if (!result.accounts || result.accounts.length === 0) {
+        showCustomAlert('当前没有账号', 'info');
+        return;
+      }
+      
+      // 筛选使用率超过90%的Trial账号
+      const highUsageTrialAccounts = result.accounts.filter(acc => {
+        const isTrial = acc.type && acc.type.toLowerCase().includes('trial');
+        const usage = acc.usage !== undefined ? acc.usage : 0;
+        return isTrial && usage >= 90;
+      });
+      
+      if (highUsageTrialAccounts.length === 0) {
+        showCustomAlert('没有使用率超过90%的Trial账号', 'info');
+        return;
+      }
+      
+      // 确认删除
+      const confirmed = await showCustomConfirm({
+        title: '删除高使用率Trial账号',
+        message: `将删除 ${highUsageTrialAccounts.length} 个使用率≥90%的Trial账号`,
+        subMessage: '删除后无法恢复，确定要继续吗？',
+        confirmText: '确定删除',
+        type: 'danger'
+      });
+      
+      if (!confirmed) return;
+      
+      // 逐个删除
+      let successCount = 0;
+      let failCount = 0;
+      
+      for (const acc of highUsageTrialAccounts) {
+        try {
+          const deleteResult = await window.ipcRenderer.invoke('delete-account', acc.id);
+          if (deleteResult.success) {
+            successCount++;
+          } else {
+            failCount++;
+            console.error(`删除账号 ${acc.email} 失败:`, deleteResult.error);
+          }
+        } catch (error) {
+          failCount++;
+          console.error(`删除账号 ${acc.email} 失败:`, error);
+        }
+      }
+      
+      // 刷新列表
+      await this.loadAccounts();
+      
+      // 显示结果
+      if (failCount === 0) {
+        if (typeof showToast === 'function') {
+          showToast(`成功删除 ${successCount} 个高使用率Trial账号`, 'success');
+        } else {
+          showCustomAlert(`成功删除 ${successCount} 个高使用率Trial账号`, 'success');
+        }
+      } else {
+        showCustomAlert(`删除完成：成功 ${successCount} 个，失败 ${failCount} 个`, 'warning');
+      }
+    } catch (error) {
+      console.error('删除高使用率Trial账号失败:', error);
+      showCustomAlert('删除失败：' + error.message, 'error');
+    }
+  },
+
+  /**
    * 导出账号 - 支持分类导出
    * @param {string} type - 导出类型: 'all'(全部), 'pro'(Pro账号), 'free'(Free账号), 'enterprise', 'teams', 'trial'
    */
@@ -2119,6 +2197,10 @@ function addManualAccount() {
 
 function deleteAllAccounts() {
   return AccountManager.deleteAllAccounts();
+}
+
+function deleteHighUsageTrialAccounts() {
+  return AccountManager.deleteHighUsageTrialAccounts();
 }
 
 function exportAccounts(type = 'all') {
